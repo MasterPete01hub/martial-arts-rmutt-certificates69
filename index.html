@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Martial Arts RMUTT | ค้นหาเกียรติบัตร</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<style>
+:root{--red:#b71920;--red2:#e31b23;--gold:#d6a84b;--ink:#121212;--muted:#667085}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:#151515;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans Thai","Segoe UI",sans-serif;background:#f4f4f4}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.045;background-image:radial-gradient(#000 .7px,transparent .7px);background-size:7px 7px}
+.hero{position:relative;overflow:hidden;color:#fff;background:radial-gradient(circle at 78% 22%,rgba(183,25,32,.72),transparent 26%),linear-gradient(135deg,#070707 0%,#161616 54%,#090909 100%);min-height:360px;display:flex;align-items:center}
+.hero:after{content:"";position:absolute;width:760px;height:760px;right:-300px;top:-260px;border:2px solid rgba(214,168,75,.22);transform:rotate(23deg);box-shadow:-30px 0 0 rgba(183,25,32,.13),-60px 0 0 rgba(214,168,75,.08)}
+.hero .slash{position:absolute;left:-8%;bottom:22px;width:72%;height:9px;background:var(--red);transform:rotate(-7deg);box-shadow:0 16px 0 rgba(214,168,75,.55),0 -14px 0 rgba(255,255,255,.07)}
+.hero .inner{width:min(1050px,92%);margin:auto;position:relative;z-index:2;padding:48px 0}
+.logo{width:min(600px,82vw);max-height:170px;object-fit:contain;object-position:left center;display:block;margin-bottom:25px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.45))}
+.kicker{display:inline-block;font-weight:800;letter-spacing:.12em;font-size:12px;color:#f0cf7a;border:1px solid rgba(214,168,75,.45);padding:7px 12px;border-radius:999px;margin-bottom:14px}
+h1{font-size:clamp(25px,4.5vw,44px);line-height:1.18;margin:0;max-width:820px;font-weight:900}
+.subtitle{font-size:clamp(16px,2.3vw,21px);margin:14px 0 0;color:#e7e7e7;max-width:760px;line-height:1.6}
+.wrap{width:min(850px,92%);margin:-48px auto 60px;position:relative;z-index:5}
+.card{background:rgba(255,255,255,.98);border:1px solid #e7e7e7;border-radius:24px;padding:26px;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+.section-title{font-size:22px;font-weight:900;margin:0 0 5px}.section-sub{color:var(--muted);margin:0 0 22px}
+label{display:block;font-weight:800;margin-bottom:9px}.searchbox{position:relative}
+input{width:100%;font-size:17px;padding:16px 17px;border:1.5px solid #d7dbe2;border-radius:14px;outline:none;background:#fff}
+input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
+.suggestions{position:absolute;left:0;right:0;top:calc(100% + 7px);background:#fff;border:1px solid #e1e5ec;border-radius:14px;overflow:hidden;z-index:20;box-shadow:0 18px 35px rgba(0,0,0,.13)}
+.suggestion{padding:14px 16px;cursor:pointer;border-bottom:1px solid #f0f1f3}.suggestion:last-child{border-bottom:0}.suggestion:hover{background:#faf1f1}
+.result{margin-top:25px;border-top:1px solid #eee;padding-top:23px}.result h2{font-size:19px;margin:0 0 14px}
+.preview{background:#eef0f3;border-radius:16px;padding:10px;border:1px solid #e3e5e8}.preview img{max-width:100%;height:auto;display:block;margin:auto;border-radius:9px}
+.download{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#171717,#333);color:white;padding:15px;border-radius:13px;font-weight:900;margin-top:14px}
+.msg{text-align:center;color:#667085;padding:18px 5px}.small{text-align:center;font-size:12px;color:#8a93a3;margin-top:10px}.hidden{display:none}
+.status{font-size:13px;margin-top:12px;text-align:center;color:#777}.error{color:#b71920}
+.footer{color:#777;text-align:center;font-size:12px;padding:0 15px 30px}
+.pillrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.pill{font-size:12px;color:#d8d8d8;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:7px 11px;border-radius:999px}
+@media(max-width:600px){.hero{min-height:330px}.hero .inner{padding:36px 0 70px}.logo{max-height:110px;margin-bottom:20px}.wrap{margin-top:-45px}.card{padding:20px;border-radius:20px}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="slash"></div><div class="inner">
+<div class="kicker">CERTIFICATE ONLINE</div>
+<img class="logo" src="logo.jpg" alt="Martial Arts RMUTT">
+<h1>โครงการอบรมเชิงปฏิบัติการ<br>ศิลปะป้องกันตัวเทควันโด</h1>
+<p class="subtitle">ระบบค้นหาและดาวน์โหลดเกียรติบัตรออนไลน์</p>
+<div class="pillrow"><span class="pill">🥋 Martial Arts RMUTT</span><span class="pill">🏆 Certificate Download</span></div>
+</div></header>
+
+<main class="wrap"><section class="card">
+<h2 class="section-title">ค้นหาเกียรติบัตรของคุณ</h2>
+<p class="section-sub">พิมพ์ชื่อ-นามสกุล แล้วเลือกชื่อจากรายการ</p>
+<label for="name">ชื่อ-นามสกุล</label>
+<div class="searchbox"><input id="name" autocomplete="off" placeholder="เช่น พีรติ จุติเสถียรกุล"><div id="suggestions" class="suggestions hidden"></div></div>
+<div id="result" class="result hidden"></div>
+<div id="message" class="msg">กำลังโหลดรายชื่อ…</div>
+<div id="status" class="status"></div>
+</section></main>
+<div class="footer">Martial Arts RMUTT • โครงการอบรมเชิงปฏิบัติการศิลปะป้องกันตัวเทควันโด</div>
+
+<script>
+const input=document.getElementById('name'), suggestions=document.getElementById('suggestions'), result=document.getElementById('result'), message=document.getElementById('message'), statusEl=document.getElementById('status');
+let certificates=[];
+function norm(s){return String(s??'').toLowerCase().replace(/\s+/g,'').trim();}
+async function loadExcel(){
+ try{
+  const res=await fetch('data.xlsx?'+Date.now()); const buf=await res.arrayBuffer();
+  const wb=XLSX.read(buf,{type:'array'}); const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{defval:''});
+  certificates=rows.filter(r=>norm(r['สถานะ'])==='มาอบรม' && r['ชื่อ-นามสกุล'] && r['ไฟล์'])
+    .map(r=>({name:String(r['ชื่อ-นามสกุล']).trim(),type:String(r['ประเภทการลงทะเบียน']||''),file:String(r['ไฟล์']).trim()}));
+  message.textContent=certificates.length?'เริ่มพิมพ์ชื่อเพื่อค้นหา 🔎':'ยังไม่มีรายชื่อที่มีสถานะ “มาอบรม”';
+  statusEl.textContent=`พร้อมค้นหา ${certificates.length} รายชื่อ`;
+ }catch(e){message.innerHTML='❌ ไม่สามารถโหลดฐานข้อมูลได้';statusEl.textContent='ตรวจสอบว่าไฟล์ data.xlsx อยู่ในโฟลเดอร์เดียวกับเว็บไซต์';statusEl.classList.add('error')}
+}
+function showSuggestions(){
+ const q=norm(input.value); suggestions.innerHTML=''; result.classList.add('hidden');
+ if(!q){suggestions.classList.add('hidden');message.textContent='เริ่มพิมพ์ชื่อเพื่อค้นหา 🔎';return}
+ const hits=certificates.filter(x=>norm(x.name).includes(q)).slice(0,8);
+ if(!hits.length){suggestions.classList.add('hidden');message.textContent='❌ ไม่พบชื่อที่ตรงกัน';return}
+ message.textContent=''; hits.forEach(x=>{const d=document.createElement('div');d.className='suggestion';d.textContent=x.name;d.onclick=()=>selectCert(x);suggestions.appendChild(d)});
+ suggestions.classList.remove('hidden');
+}
+function selectCert(x){
+ input.value=x.name;suggestions.classList.add('hidden');
+ const imgPath='certificates/'+encodeURIComponent(x.file);
+ result.innerHTML=`<h2>🎉 พบเกียรติบัตรของคุณ</h2><div class="preview"><img src="${imgPath}" alt="เกียรติบัตรของ ${x.name}" onerror="this.closest('.preview').innerHTML='<div class="msg">⚠️ พบข้อมูลใน Excel แล้ว แต่ยังไม่พบไฟล์ภาพ <b>'+x.file+'</b></div>'"></div><a class="download" href="${imgPath}" download="เกียรติบัตร_${x.name}.png">⬇️ ดาวน์โหลดเกียรติบัตร</a><div class="small">ประเภทการลงทะเบียน: ${x.type||'-'} • ไฟล์: ${x.file}</div>`;
+ result.classList.remove('hidden');message.textContent='';
+}
+input.addEventListener('input',showSuggestions);
+document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))suggestions.classList.add('hidden')});
+loadExcel();
+</script>
+</body></html>
