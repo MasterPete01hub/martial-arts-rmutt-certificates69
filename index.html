@@ -177,6 +177,110 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
 .comments-section .giscus {
   text-align: left;
 }
+.comments-section {
+  width: min(850px, 92%);
+  margin: 45px auto 50px;
+  padding: 30px 20px;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+.comments-section h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.comments-section > p {
+  margin: 8px 0 25px;
+  color: #777;
+  font-size: 14px;
+}
+
+.comment-form {
+  max-width: 650px;
+  margin: auto;
+}
+
+.comment-form input,
+.comment-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
+.comment-form textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.comment-form input:focus,
+.comment-form textarea:focus {
+  border-color: #999;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.05);
+}
+
+.comment-form button {
+  border: 0;
+  border-radius: 14px;
+  padding: 13px 25px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  background: #111;
+  color: #fff;
+}
+
+.comment-form button:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+
+#commentMessage {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+.comment-item {
+  max-width: 650px;
+  margin: 18px auto 0;
+  padding: 18px;
+  background: #f8f8f8;
+  border-radius: 15px;
+  text-align: left;
+}
+
+.comment-item strong {
+  display: block;
+  font-size: 15px;
+}
+
+.comment-item small {
+  display: block;
+  margin-top: 3px;
+  color: #999;
+  font-size: 11px;
+}
+
+.comment-item p {
+  margin: 10px 0 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.comments-loading {
+  margin-top: 25px;
+  color: #999;
+  font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -264,6 +368,37 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
           crossorigin="anonymous"
           async>
   </script>
+</section>
+<section class="comments-section">
+
+  <h2>💬 มาเม้าท์มอยงานอบรมกันหน่อยย!!</h2>
+  <p>ฝากความคิดเห็นหรือความประทับใจจากงานอบรมได้เลย 🥋</p>
+
+  <div class="comment-form">
+
+    <input
+      type="text"
+      id="commentName"
+      placeholder="ชื่อของคุณ"
+      maxlength="50">
+
+    <textarea
+      id="commentText"
+      placeholder="เขียนความคิดเห็นของคุณ..."
+      maxlength="500"></textarea>
+
+    <button id="commentSubmit" onclick="submitComment()">
+      📨 ส่งความคิดเห็น
+    </button>
+
+    <div id="commentMessage"></div>
+
+  </div>
+
+  <div id="commentsList">
+    <div class="comments-loading">กำลังโหลดความคิดเห็น...</div>
+  </div>
+
 </section></main>
 <div class="footer">Martial Arts RMUTT • โครงการอบรมเชิงปฏิบัติการศิลปะป้องกันตัวเทควันโด</div>
 
@@ -340,5 +475,134 @@ function selectCert(x){
 input.addEventListener('input',showSuggestions);
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))suggestions.classList.add('hidden')});
 loadExcel();
+const COMMENTS_API =
+  'https://script.google.com/macros/s/AKfycbwZHbR8q9rtko1DBoD5qlexLQ3y5u4pXLA7BPWi0BuNh9PFz2NwjpeujAVzd5OoRChc/exec';
+
+
+async function submitComment() {
+
+  const nameInput = document.getElementById('commentName');
+  const commentInput = document.getElementById('commentText');
+  const button = document.getElementById('commentSubmit');
+  const message = document.getElementById('commentMessage');
+
+  const name = nameInput.value.trim();
+  const comment = commentInput.value.trim();
+
+  if (!name) {
+    message.textContent = '⚠️ กรุณากรอกชื่อ';
+    return;
+  }
+
+  if (!comment) {
+    message.textContent = '⚠️ กรุณากรอกความคิดเห็น';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'กำลังส่ง...';
+  message.textContent = '';
+
+  try {
+
+    await fetch(COMMENTS_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        name: name,
+        comment: comment
+      })
+    });
+
+    nameInput.value = '';
+    commentInput.value = '';
+
+    message.textContent = '✅ ส่งความคิดเห็นเรียบร้อยแล้ว ขอบคุณครับ!';
+
+    setTimeout(loadComments, 800);
+
+  } catch (error) {
+
+    message.textContent =
+      '❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = '📨 ส่งความคิดเห็น';
+
+  }
+}
+
+
+async function loadComments() {
+
+  const list = document.getElementById('commentsList');
+
+  try {
+
+    const response = await fetch(COMMENTS_API);
+    const data = await response.json();
+
+    if (!data.success || !data.comments.length) {
+
+      list.innerHTML =
+        '<div class="comments-loading">ยังไม่มีความคิดเห็น เป็นคนแรกเลย! 🥋</div>';
+
+      return;
+    }
+
+    const comments = data.comments.reverse();
+
+    list.innerHTML = comments.map(item => {
+
+      const name = escapeHTML(item.name);
+      const comment = escapeHTML(item.comment);
+
+      let date = '';
+
+      if (item.date) {
+        date = new Date(item.date).toLocaleDateString('th-TH', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
+      return `
+        <div class="comment-item">
+          <strong>👤 ${name}</strong>
+          <small>${date}</small>
+          <p>${comment}</p>
+        </div>
+      `;
+
+    }).join('');
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<div class="comments-loading">ไม่สามารถโหลดความคิดเห็นได้</div>';
+
+  }
+}
+
+
+function escapeHTML(text) {
+
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+}
+
+
+loadComments();
 </script>
 </body></html>
