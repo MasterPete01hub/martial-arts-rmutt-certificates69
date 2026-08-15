@@ -81,10 +81,51 @@ function showSuggestions(){
  suggestions.classList.remove('hidden');
  }
 function selectCert(x){
- input.value=x.name;suggestions.classList.add('hidden');
- const imgPath='certificates/'+encodeURIComponent(x.file);
- result.innerHTML=`<h2>🎉 พบเกียรติบัตรของคุณ</h2><div class="preview"><img src="${imgPath}" alt="เกียรติบัตรของ ${x.name}" onerror="this.closest('.preview').innerHTML='<div class="msg">⚠️ พบข้อมูลใน Excel แล้ว แต่ยังไม่พบไฟล์ภาพ <b>'+x.file+'</b></div>'"></div><a class="download" href="${imgPath}" download="เกียรติบัตร_${x.name}.png">⬇️ ดาวน์โหลดเกียรติบัตร</a><div class="small">ประเภทการลงทะเบียน: ${x.type||'-'} • ไฟล์: ${x.file}</div>`;
- result.classList.remove('hidden');message.textContent='';
+  input.value = x.name;
+  suggestions.classList.add('hidden');
+  message.classList.add('hidden');
+
+  const imgPath = 'certificates/' + encodeURIComponent(x.file);
+
+  result.innerHTML = `
+    <h2>🎉 พบเกียรติบัตรของคุณ</h2>
+
+    <div class="preview" id="certificatePreview">
+      <div class="msg">กำลังโหลดเกียรติบัตร...</div>
+    </div>
+
+    <a class="download"
+       href="${imgPath}"
+       download="เกียรติบัตร_${x.name}.png">
+       ⬇️ ดาวน์โหลดเกียรติบัตร
+    </a>
+
+    <div class="small">
+      ประเภทการลงทะเบียน: ${x.type || '-'} • ไฟล์: ${x.file}
+    </div>
+  `;
+
+  result.classList.remove('hidden');
+
+  const preview = document.getElementById('certificatePreview');
+  const img = new Image();
+
+  img.onload = function(){
+    img.alt = 'เกียรติบัตรของ ' + x.name;
+    preview.innerHTML = '';
+    preview.appendChild(img);
+  };
+
+  img.onerror = function(){
+    preview.innerHTML = `
+      <div class="msg">
+        ⚠️ พบข้อมูลใน Excel แล้ว แต่ยังไม่พบไฟล์ภาพ<br>
+        <b>${x.file}</b>
+      </div>
+    `;
+  };
+
+  img.src = imgPath;
 }
 input.addEventListener('input',showSuggestions);
 document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))suggestions.classList.add('hidden')});
