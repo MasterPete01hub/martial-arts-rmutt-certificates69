@@ -57,6 +57,103 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
 .footer{color:#777;text-align:center;font-size:12px;padding:0 15px 30px}
 .pillrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.pill{font-size:12px;color:#d8d8d8;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:7px 11px;border-radius:999px}
 @media(max-width:600px){.hero{min-height:330px}.hero .inner{padding:36px 0 70px}.logo{max-height:110px;margin-bottom:20px}.wrap{margin-top:-45px}.card{padding:20px;border-radius:20px}}
+/* 📱 Contact Section */
+
+.contact-section {
+  width: min(850px, 92%);
+  margin: 45px auto 30px;
+  padding: 30px 20px;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+
+.contact-section h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.contact-section > p {
+  margin: 8px 0 22px;
+  color: #777;
+  font-size: 14px;
+}
+
+.contact-links {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 230px;
+  padding: 14px 18px;
+  border-radius: 16px;
+  text-decoration: none;
+  color: #222;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 6px 20px rgba(0,0,0,.07);
+  text-align: left;
+  transition: .2s ease;
+}
+
+.contact-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.12);
+}
+
+.contact-btn > span {
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.contact-btn strong {
+  display: block;
+  font-size: 15px;
+}
+
+.contact-btn small {
+  display: block;
+  margin-top: 3px;
+  color: #888;
+  font-size: 11px;
+}
+
+.facebook > span {
+  background: #eaf2ff;
+  color: #1877f2;
+}
+
+.instagram > span {
+  background: #f8eafa;
+  color: #c13584;
+}
+
+@media (max-width: 600px) {
+
+  .contact-links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-btn {
+    width: 100%;
+    max-width: 330px;
+    box-sizing: border-box;
+  }
+
+}
 </style>
 </head>
 <body>
@@ -83,6 +180,45 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
 <div id="result" class="result hidden"></div>
 <div id="message" class="msg">กำลังโหลดรายชื่อ…</div>
 <div id="status" class="status"></div>
+</section>
+<section class="contact-section">
+  <h2>📱 ติดต่อ / ติดตามข่าวสาร</h2>
+  <p>ติดตามข่าวสารและกิจกรรมของ Martial Arts RMUTT</p>
+
+  <div class="contact-links">
+
+    <a
+      href="https://www.facebook.com/share/17ucqCKSat/?mibextid=wwXIfr"
+      target="_blank"
+      rel="noopener"
+      class="contact-btn facebook">
+
+      <span>f</span>
+
+      <div>
+        <strong>Facebook</strong>
+        <small>ติดตามข่าวสาร</small>
+      </div>
+
+    </a>
+
+
+    <a
+      href="https://www.instagram.com/taekwondo.rmutt?igsi=Z3Y3YmFycmp0OWds"
+      target="_blank"
+      rel="noopener"
+      class="contact-btn instagram">
+
+      <span>◎</span>
+
+      <div>
+        <strong>Instagram</strong>
+        <small>@taekwondo.rmutt</small>
+      </div>
+
+    </a>
+
+  </div>
 </section></main>
 <div class="footer">Martial Arts RMUTT • โครงการอบรมเชิงปฏิบัติการศิลปะป้องกันตัวเทควันโด</div>
 
