@@ -386,76 +386,37 @@ const input=document.getElementById('name'), suggestions=document.getElementById
 let certificates=[];
 function norm(s){return String(s??'').toLowerCase().replace(/\s+/g,'').trim();}
 async function loadExcel(){
-  try {
+ try{
+  const res=await fetch('data.xlsx?'+Date.now());
+  const buf=await res.arrayBuffer();
 
-    const url = './data.xlsx?v=' + new Date().getTime();
+  const wb=XLSX.read(buf,{type:'array'});
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const rows=XLSX.utils.sheet_to_json(ws,{defval:''});
 
-    const res = await fetch(url, {
-      method: 'GET',
-      cache: 'no-store'
-    });
+  certificates=rows
+    .filter(r =>
+      norm(r['สถานะ'])==='มาอบรม' &&
+      r['ชื่อ-นามสกุล'] &&
+      r['ไฟล์']
+    )
+    .map(r=>({
+      name:String(r['ชื่อ-นามสกุล']).trim(),
+      type:String(r['ประเภทการลงทะเบียน']||''),
+      file:String(r['ไฟล์']).trim()
+    }));
 
-    if (!res.ok) {
-      throw new Error('HTTP ' + res.status);
-    }
+  message.textContent=certificates.length
+    ? 'เริ่มพิมพ์ชื่อเพื่อค้นหา 🔎'
+    : 'ยังไม่มีรายชื่อที่มีสถานะ “มาอบรม”';
 
-    const buf = await res.arrayBuffer();
+  statusEl.textContent=`พร้อมค้นหา ${certificates.length} รายชื่อ`;
 
-    if (!buf || buf.byteLength === 0) {
-      throw new Error('ไฟล์ว่าง');
-    }
-
-    const wb = XLSX.read(buf, {
-      type: 'array'
-    });
-
-    if (!wb.SheetNames || !wb.SheetNames.length) {
-      throw new Error('ไม่พบ Sheet');
-    }
-
-    const ws = wb.Sheets[wb.SheetNames[0]];
-
-    const rows = XLSX.utils.sheet_to_json(ws, {
-      defval: ''
-    });
-
-    certificates = rows
-      .filter(r =>
-        norm(r['สถานะ']) === 'มาอบรม' &&
-        r['ชื่อ-นามสกุล'] &&
-        r['ไฟล์']
-      )
-      .map(r => ({
-        name: String(r['ชื่อ-นามสกุล']).trim(),
-        type: String(r['ประเภทการลงทะเบียน'] || ''),
-        file: String(r['ไฟล์']).trim()
-      }));
-
-    message.classList.remove('hidden');
-
-    message.textContent =
-      certificates.length
-        ? 'เริ่มพิมพ์ชื่อเพื่อค้นหา 🔎'
-        : 'ยังไม่มีรายชื่อที่มีสถานะ “มาอบรม”';
-
-    statusEl.textContent =
-      พร้อมค้นหา ${certificates.length} รายชื่อ;
-
-    statusEl.classList.remove('error');
-
-  } catch(e) {
-
-    console.error('โหลด Excel ไม่สำเร็จ:', e);
-
-    message.classList.remove('hidden');
-    message.innerHTML =
-      '❌ ไม่สามารถโหลดฐานข้อมูลได้';
-
-    statusEl.textContent =
-      'ไม่สามารถโหลดไฟล์ data.xlsx ได้ กรุณาลองรีเฟรชหน้าเว็บ';
-
-    statusEl.classList.add('error');
-  }
+ }catch(e){
+  message.innerHTML='❌ ไม่สามารถโหลดฐานข้อมูลได้';
+  statusEl.textContent='ตรวจสอบว่าไฟล์ data.xlsx อยู่ในโฟลเดอร์เดียวกับเว็บไซต์';
+  statusEl.classList.add('error');
+ }
 }
 function showSuggestions(){
  const q=norm(input.value); suggestions.innerHTML=''; result.classList.add('hidden');
