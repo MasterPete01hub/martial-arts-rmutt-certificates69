@@ -79,7 +79,7 @@ function showSuggestions(){
  if(!hits.length){suggestions.classList.add('hidden');message.textContent='❌ ไม่พบชื่อที่ตรงกัน';return}
  message.textContent=''; hits.forEach(x=>{const d=document.createElement('div');d.className='suggestion';d.textContent=x.name;d.onclick=()=>selectCert(x);suggestions.appendChild(d)});
  suggestions.classList.remove('hidden');
-}
+ }
 function selectCert(x){
  input.value=x.name;suggestions.classList.add('hidden');
  const imgPath='certificates/'+encodeURIComponent(x.file);
