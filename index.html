@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="th">
 <head>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TCK3E5VS3F"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TCK3E5VS3F');
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Martial Arts RMUTT | ค้นหาเกียรติบัตร</title>
@@ -281,9 +289,85 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
   color: #999;
   font-size: 13px;
 }
+
+/* 🎉 Welcome Popup */
+.welcome-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+  opacity:1;
+  transition:opacity .25s ease;
+}
+.welcome-overlay.hidden{
+  display:none;
+}
+.welcome-popup{
+  width:min(460px,92vw);
+  background:#fff;
+  border-radius:24px;
+  padding:32px 25px 25px;
+  text-align:center;
+  box-shadow:0 25px 70px rgba(0,0,0,.3);
+  position:relative;
+  animation:welcomePop .3s ease-out;
+}
+.welcome-icon{
+  font-size:48px;
+  margin-bottom:8px;
+}
+.welcome-popup h2{
+  margin:0;
+  font-size:25px;
+  font-weight:900;
+  color:#b71920;
+}
+.welcome-popup p{
+  margin:12px 0 22px;
+  color:#667085;
+  line-height:1.7;
+  font-size:15px;
+}
+.welcome-close{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:13px 20px;
+  background:linear-gradient(135deg,#171717,#333);
+  color:#fff;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+.welcome-close:hover{
+  transform:translateY(-1px);
+}
+@keyframes welcomePop{
+  from{opacity:0;transform:scale(.9) translateY(10px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
 </style>
 </head>
 <body>
+
+<!-- 🎉 Welcome Popup -->
+<div id="welcomePopup" class="welcome-overlay">
+  <div class="welcome-popup" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-icon">🥋</div>
+    <h2 id="welcomeTitle">ยินดีต้อนรับสมาชิกชมรม</h2>
+    <p>ยินดีต้อนรับเข้าสู่เว็บไซต์ Martial Arts RMUTT<br>ขอให้สนุกกับกิจกรรมและการอบรมของชมรมครับ ❤️</p>
+    <button class="welcome-close" id="welcomeClose">เข้าสู่เว็บไซต์</button>
+  </div>
+</div>
+
 <header class="hero">
 <div class="slash"></div><div class="inner">
 <div class="kicker">CERTIFICATE ONLINE</div>
@@ -427,6 +511,10 @@ function showSuggestions(){
  suggestions.classList.remove('hidden');
  }
 function selectCert(x){
+  if(typeof gtag === 'function') gtag('event', 'certificate_found', {
+    certificate_name: x.name,
+    registration_type: x.type || ''
+  });
   input.value = x.name;
   suggestions.classList.add('hidden');
   message.classList.add('hidden');
@@ -441,6 +529,7 @@ function selectCert(x){
     </div>
 
     <a class="download"
+       id="certificateDownload"
        href="${imgPath}"
        download="เกียรติบัตร_${x.name}.png">
        ⬇️ ดาวน์โหลดเกียรติบัตร
@@ -452,6 +541,16 @@ function selectCert(x){
   `;
 
   result.classList.remove('hidden');
+
+  const downloadLink = document.getElementById('certificateDownload');
+  if(downloadLink) {
+    downloadLink.addEventListener('click', function(){
+      if(typeof gtag === 'function') gtag('event', 'certificate_download', {
+        certificate_name: x.name,
+        file_name: x.file
+      });
+    }, {once:true});
+  }
 
   const preview = document.getElementById('certificatePreview');
   const img = new Image();
@@ -605,5 +704,20 @@ function escapeHTML(text) {
 
 
 loadComments();
+
+// Welcome popup
+const welcomePopup = document.getElementById('welcomePopup');
+const welcomeClose = document.getElementById('welcomeClose');
+
+function closeWelcomePopup(){
+  welcomePopup.classList.add('hidden');
+}
+
+welcomeClose.addEventListener('click', closeWelcomePopup);
+
+welcomePopup.addEventListener('click', function(e){
+  if(e.target === welcomePopup) closeWelcomePopup();
+});
+
 </script>
 </body></html>
