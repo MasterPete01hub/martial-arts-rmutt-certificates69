@@ -354,6 +354,123 @@ input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(183,25,32,.09)}
   to{opacity:1;transform:scale(1) translateY(0)}
 }
 
+
+/* ✨ Smooth site animations */
+.hero .kicker,
+.hero .logo,
+.hero h1,
+.hero .subtitle,
+.hero .pillrow{
+  opacity:0;
+  animation: heroRise .7s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.hero .kicker{animation-delay:.08s}
+.hero .logo{animation-delay:.18s}
+.hero h1{animation-delay:.30s}
+.hero .subtitle{animation-delay:.42s}
+.hero .pillrow{animation-delay:.54s}
+
+@keyframes heroRise{
+  from{opacity:0;transform:translateY(22px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.event-video,
+.wrap > .card,
+.contact-section,
+.comments-section{
+  transition:transform .7s cubic-bezier(.2,.8,.2,1), opacity .7s ease;
+}
+
+.reveal-on-scroll{
+  opacity:0;
+  transform:translateY(28px);
+}
+.reveal-on-scroll.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Interactive polish */
+.download,
+.contact-btn,
+.comment-form button,
+.welcome-close{
+  transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.download:hover,
+.contact-btn:hover,
+.comment-form button:hover,
+.welcome-close:hover{
+  transform:translateY(-3px);
+}
+.download:active,
+.contact-btn:active,
+.comment-form button:active,
+.welcome-close:active{
+  transform:scale(.97);
+}
+
+input,
+.comment-form input,
+.comment-form textarea{
+  transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+input:focus,
+.comment-form input:focus,
+.comment-form textarea:focus{
+  transform:translateY(-1px);
+}
+
+.suggestion{
+  animation:suggestionIn .22s ease both;
+}
+@keyframes suggestionIn{
+  from{opacity:0;transform:translateY(-5px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+#result:not(.hidden){
+  animation:certificateIn .5s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes certificateIn{
+  from{opacity:0;transform:translateY(18px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.preview img{
+  animation:certificateImageIn .55s ease both;
+}
+@keyframes certificateImageIn{
+  from{opacity:0;transform:scale(.97)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.comment-item{
+  animation:commentIn .4s ease both;
+}
+@keyframes commentIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Keep animations comfortable on mobile and for reduced-motion users */
+@media (max-width:600px){
+  .download:hover,
+  .contact-btn:hover,
+  .comment-form button:hover,
+  .welcome-close:hover{transform:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -720,4 +837,32 @@ welcomePopup.addEventListener('click', function(e){
 });
 
 </script>
+
+<script>
+/* ✨ Reveal sections as they enter the viewport */
+document.addEventListener('DOMContentLoaded', function(){
+  const targets = document.querySelectorAll(
+    '.event-video, .wrap > .card, .contact-section, .comments-section'
+  );
+
+  targets.forEach(el => el.classList.add('reveal-on-scroll'));
+
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver(function(entries, obs){
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  targets.forEach(el => observer.observe(el));
+});
+</script>
+
 </body></html>
