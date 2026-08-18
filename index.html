@@ -1146,6 +1146,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 <script>
+/* ให้เว็บเปิดที่ด้านบนสุดเสมอ */
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+window.addEventListener('load', function () {
+  window.scrollTo(0, 0);
+});
+
 /* 📸 Activity Gallery Slider */
 document.addEventListener('DOMContentLoaded', function () {
   const track = document.getElementById('galleryTrack');
@@ -1181,12 +1189,15 @@ document.addEventListener('DOMContentLoaded', function () {
       dot.classList.toggle('active', i === current);
     });
 
+    /* เลื่อนเฉพาะแถบ Thumbnail ไม่ให้หน้าเว็บทั้งหน้ากระโดด */
+    const thumbsBox = document.getElementById('galleryThumbs');
     const activeThumb = thumbs[current];
-    if (activeThumb) {
-      activeThumb.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
+
+    if (thumbsBox && activeThumb && userAction) {
+      const left = activeThumb.offsetLeft - (thumbsBox.clientWidth - activeThumb.offsetWidth) / 2;
+      thumbsBox.scrollTo({
+        left: Math.max(0, left),
+        behavior: 'smooth'
       });
     }
 
