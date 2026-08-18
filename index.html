@@ -471,6 +471,233 @@ input:focus,
   }
 }
 
+
+/* =========================================================
+   📸 ACTIVITY GALLERY — Thumbnail Slider
+   รูปใส่ในโฟลเดอร์ activities/ ชื่อ 1.jpg ถึง 10.jpg
+   ========================================================= */
+
+.activity-gallery {
+  width: min(850px, 92%);
+  margin: 42px auto 10px;
+  padding: 30px 20px;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+
+.activity-gallery h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.activity-gallery > p {
+  margin: 8px 0 22px;
+  color: #777;
+  font-size: 14px;
+}
+
+.gallery-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 22px;
+  background: #111;
+  box-shadow: 0 18px 42px rgba(0,0,0,.14);
+  touch-action: pan-y;
+}
+
+.gallery-track {
+  display: flex;
+  transition: transform .65s cubic-bezier(.22,.61,.36,1);
+  will-change: transform;
+}
+
+.gallery-slide {
+  min-width: 100%;
+  aspect-ratio: 16 / 10;
+  position: relative;
+  overflow: hidden;
+  background: #171717;
+}
+
+.gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 1s ease, filter .6s ease;
+}
+
+.gallery-slide.is-active img {
+  transform: scale(1.035);
+}
+
+.gallery-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.35),
+    transparent 45%
+  );
+  opacity: .55;
+}
+
+.gallery-number {
+  position: absolute;
+  z-index: 2;
+  right: 14px;
+  bottom: 12px;
+  color: #fff;
+  background: rgba(0,0,0,.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.gallery-arrow {
+  position: absolute;
+  z-index: 4;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 50%;
+  background: rgba(0,0,0,.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform .2s ease, background .2s ease;
+}
+
+.gallery-arrow:hover {
+  background: rgba(183,25,32,.82);
+}
+
+.gallery-arrow:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+.gallery-prev { left: 12px; }
+.gallery-next { right: 12px; }
+
+.gallery-thumbs {
+  display: flex;
+  gap: 9px;
+  overflow-x: auto;
+  padding: 12px 2px 3px;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.gallery-thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-thumb {
+  flex: 0 0 78px;
+  height: 54px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #222;
+  cursor: pointer;
+  opacity: .62;
+  transition: transform .25s ease, opacity .25s ease, border-color .25s ease;
+}
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.gallery-thumb:hover {
+  opacity: .9;
+  transform: translateY(-2px);
+}
+
+.gallery-thumb.active {
+  opacity: 1;
+  border-color: var(--red2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(183,25,32,.22);
+}
+
+.gallery-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.gallery-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #c8c8c8;
+  cursor: pointer;
+  transition: width .25s ease, border-radius .25s ease, background .25s ease;
+}
+
+.gallery-dot.active {
+  width: 22px;
+  border-radius: 999px;
+  background: var(--red2);
+}
+
+.gallery-caption {
+  margin-top: 10px;
+  color: #8a93a3;
+  font-size: 11px;
+}
+
+@media (max-width: 600px) {
+  .activity-gallery {
+    margin: 32px auto 5px;
+    padding: 25px 10px;
+  }
+
+  .activity-gallery h2 {
+    font-size: 20px;
+  }
+
+  .gallery-shell {
+    border-radius: 17px;
+  }
+
+  .gallery-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .gallery-prev { left: 8px; }
+  .gallery-next { right: 8px; }
+
+  .gallery-thumb {
+    flex-basis: 68px;
+    height: 48px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -509,6 +736,58 @@ input:focus,
 <div id="message" class="msg">กำลังโหลดรายชื่อ…</div>
 <div id="status" class="status"></div>
 </section>
+
+<section class="activity-gallery">
+  <h2>📸 ภาพกิจกรรม</h2>
+  <p>บรรยากาศและความประทับใจจากโครงการอบรมศิลปะป้องกันตัวเทควันโด</p>
+
+  <div class="gallery-shell" id="activityGallery">
+    <div class="gallery-track" id="galleryTrack">
+      <div class="gallery-slide is-active"><img src="activities/1.jpg" alt="ภาพกิจกรรม 1" loading="eager"><span class="gallery-number">1 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/2.jpg" alt="ภาพกิจกรรม 2" loading="lazy"><span class="gallery-number">2 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/3.jpg" alt="ภาพกิจกรรม 3" loading="lazy"><span class="gallery-number">3 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/4.jpg" alt="ภาพกิจกรรม 4" loading="lazy"><span class="gallery-number">4 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/5.jpg" alt="ภาพกิจกรรม 5" loading="lazy"><span class="gallery-number">5 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/6.jpg" alt="ภาพกิจกรรม 6" loading="lazy"><span class="gallery-number">6 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/7.jpg" alt="ภาพกิจกรรม 7" loading="lazy"><span class="gallery-number">7 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/8.jpg" alt="ภาพกิจกรรม 8" loading="lazy"><span class="gallery-number">8 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/9.jpg" alt="ภาพกิจกรรม 9" loading="lazy"><span class="gallery-number">9 / 10</span></div>
+      <div class="gallery-slide"><img src="activities/10.jpg" alt="ภาพกิจกรรม 10" loading="lazy"><span class="gallery-number">10 / 10</span></div>
+    </div>
+
+    <button class="gallery-arrow gallery-prev" id="galleryPrev" type="button" aria-label="ภาพก่อนหน้า">‹</button>
+    <button class="gallery-arrow gallery-next" id="galleryNext" type="button" aria-label="ภาพถัดไป">›</button>
+  </div>
+
+  <div class="gallery-thumbs" id="galleryThumbs" aria-label="เลือกภาพกิจกรรม">
+    <button class="gallery-thumb active" type="button" data-index="0" aria-label="ภาพที่ 1"><img src="activities/1.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="1" aria-label="ภาพที่ 2"><img src="activities/2.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="2" aria-label="ภาพที่ 3"><img src="activities/3.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="3" aria-label="ภาพที่ 4"><img src="activities/4.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="4" aria-label="ภาพที่ 5"><img src="activities/5.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="5" aria-label="ภาพที่ 6"><img src="activities/6.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="6" aria-label="ภาพที่ 7"><img src="activities/7.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="7" aria-label="ภาพที่ 8"><img src="activities/8.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="8" aria-label="ภาพที่ 9"><img src="activities/9.jpg" alt=""></button>
+    <button class="gallery-thumb" type="button" data-index="9" aria-label="ภาพที่ 10"><img src="activities/10.jpg" alt=""></button>
+  </div>
+
+  <div class="gallery-dots" id="galleryDots" aria-label="ตัวบอกตำแหน่งภาพ">
+    <button class="gallery-dot active" type="button" data-index="0" aria-label="ไปภาพที่ 1"></button>
+    <button class="gallery-dot" type="button" data-index="1" aria-label="ไปภาพที่ 2"></button>
+    <button class="gallery-dot" type="button" data-index="2" aria-label="ไปภาพที่ 3"></button>
+    <button class="gallery-dot" type="button" data-index="3" aria-label="ไปภาพที่ 4"></button>
+    <button class="gallery-dot" type="button" data-index="4" aria-label="ไปภาพที่ 5"></button>
+    <button class="gallery-dot" type="button" data-index="5" aria-label="ไปภาพที่ 6"></button>
+    <button class="gallery-dot" type="button" data-index="6" aria-label="ไปภาพที่ 7"></button>
+    <button class="gallery-dot" type="button" data-index="7" aria-label="ไปภาพที่ 8"></button>
+    <button class="gallery-dot" type="button" data-index="8" aria-label="ไปภาพที่ 9"></button>
+    <button class="gallery-dot" type="button" data-index="9" aria-label="ไปภาพที่ 10"></button>
+  </div>
+
+  <div class="gallery-caption">แตะลูกศรหรือรูปตัวอย่างเพื่อดูภาพอื่น ๆ • สไลด์ซ้าย/ขวาบนมือถือได้</div>
+</section>
+
 <section class="contact-section">
   <h2>📱 ติดต่อ / ติดตามข่าวสาร</h2>
   <p>ติดตามข่าวสารและกิจกรรมของ Martial Arts RMUTT</p>
@@ -842,7 +1121,7 @@ welcomePopup.addEventListener('click', function(e){
 /* ✨ Reveal sections as they enter the viewport */
 document.addEventListener('DOMContentLoaded', function(){
   const targets = document.querySelectorAll(
-    '.event-video, .wrap > .card, .contact-section, .comments-section'
+    '.event-video, .wrap > .card, .activity-gallery, .contact-section, .comments-section'
   );
 
   targets.forEach(el => el.classList.add('reveal-on-scroll'));
@@ -862,6 +1141,116 @@ document.addEventListener('DOMContentLoaded', function(){
   }, { threshold: 0.12 });
 
   targets.forEach(el => observer.observe(el));
+});
+</script>
+
+
+<script>
+/* 📸 Activity Gallery Slider */
+document.addEventListener('DOMContentLoaded', function () {
+  const track = document.getElementById('galleryTrack');
+  const gallery = document.getElementById('activityGallery');
+  const slides = gallery ? gallery.querySelectorAll('.gallery-slide') : [];
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+  const dots = document.querySelectorAll('.gallery-dot');
+  const prev = document.getElementById('galleryPrev');
+  const next = document.getElementById('galleryNext');
+
+  if (!track || !gallery || !slides.length) return;
+
+  let current = 0;
+  let timer;
+  let startX = 0;
+  let endX = 0;
+  let pointerDown = false;
+
+  function goTo(index, userAction = false) {
+    current = (index + slides.length) % slides.length;
+
+    track.style.transform = 'translateX(-' + (current * 100) + '%)';
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('is-active', i === current);
+    });
+
+    thumbs.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === current);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === current);
+    });
+
+    const activeThumb = thumbs[current];
+    if (activeThumb) {
+      activeThumb.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+
+    if (userAction) restartAuto();
+  }
+
+  function nextSlide() {
+    goTo(current + 1, true);
+  }
+
+  function prevSlide() {
+    goTo(current - 1, true);
+  }
+
+  function restartAuto() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  next.addEventListener('click', nextSlide);
+  prev.addEventListener('click', prevSlide);
+
+  thumbs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      goTo(Number(btn.dataset.index), true);
+    });
+  });
+
+  dots.forEach(btn => {
+    btn.addEventListener('click', () => {
+      goTo(Number(btn.dataset.index), true);
+    });
+  });
+
+  gallery.addEventListener('mouseenter', () => clearInterval(timer));
+  gallery.addEventListener('mouseleave', restartAuto);
+
+  gallery.addEventListener('touchstart', function (e) {
+    startX = e.changedTouches[0].clientX;
+    pointerDown = true;
+    clearInterval(timer);
+  }, { passive: true });
+
+  gallery.addEventListener('touchend', function (e) {
+    if (!pointerDown) return;
+
+    endX = e.changedTouches[0].clientX;
+    const distance = endX - startX;
+
+    if (Math.abs(distance) > 45) {
+      if (distance < 0) nextSlide();
+      else prevSlide();
+    } else {
+      restartAuto();
+    }
+
+    pointerDown = false;
+  }, { passive: true });
+
+  gallery.addEventListener('focusin', () => clearInterval(timer));
+  gallery.addEventListener('focusout', restartAuto);
+
+  goTo(0);
+  restartAuto();
 });
 </script>
 
