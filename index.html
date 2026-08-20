@@ -698,22 +698,6 @@ input:focus,
   }
 }
 
-
-/* Certificate loading progress bar */
-.certificate-loading{padding:10px 4px 6px}
-.progress-track{width:100%;height:10px;overflow:hidden;border-radius:999px;background:#ececec;box-shadow:inset 0 1px 3px rgba(0,0,0,.10)}
-.progress-bar{position:relative;width:0%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#b71920,#e0a52b);transition:width .35s ease;overflow:hidden}
-.progress-bar:after{content:"";position:absolute;inset:0;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);transform:translateX(-120%);animation:progressShine 1.15s linear infinite}
-@keyframes progressShine{to{transform:translateX(270%)}}
-.progress-info{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;font-size:12px;color:#777}
-.progress-percent{font-weight:900;color:#b71920;min-width:38px;text-align:right}
-.progress-success .progress-bar{background:linear-gradient(90deg,#16843a,#43b96a)}
-.progress-success .progress-percent{color:#16843a}
-.progress-error .progress-bar{background:#b71920}
-.progress-error .progress-percent{color:#b71920}
-.certificate-loading.done{animation:loadingDone .35s ease both}
-@keyframes loadingDone{from{opacity:.7;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
-
 </style>
 </head>
 <body>
@@ -923,89 +907,186 @@ function showSuggestions(){
  suggestions.classList.remove('hidden');
  }
 function selectCert(x){
-  input.value=x.name;
+  if(typeof gtag === 'function') gtag('event', 'certificate_found', {
+    certificate_name: x.name,
+    registration_type: x.type || ''
+  });
+  input.value = x.name;
   suggestions.classList.add('hidden');
   message.classList.add('hidden');
 
-  const imgPath='certificates/'+encodeURIComponent(x.file);
+  const imgPath = 'certificates/' + encodeURIComponent(x.file);
 
-  result.innerHTML=`
+  result.innerHTML = `
     <h2>🎉 พบเกียรติบัตรของคุณ</h2>
+
     <div class="preview" id="certificatePreview">
-      <div class="certificate-loading" id="certificateLoading">
-        <div class="progress-track"><div class="progress-bar" id="certificateProgress"></div></div>
-        <div class="progress-info">
-          <span id="certificateProgressText">กำลังเตรียมเกียรติบัตร...</span>
-          <span class="progress-percent" id="certificateProgressPercent">0%</span>
-        </div>
-      </div>
+      <div class="msg">กำลังโหลดเกียรติบัตร...</div>
     </div>
-    <a class="download" id="certificateDownload"
-       href="${imgPath}" download="เกียรติบัตร_${x.name}.png"
-       style="visibility:hidden;opacity:0;pointer-events:none">
+
+    <a class="download"
+       id="certificateDownload"
+       href="${imgPath}"
+       download="เกียรติบัตร_${x.name}.png">
        ⬇️ ดาวน์โหลดเกียรติบัตร
     </a>
-    <div class="small">ประเภทการลงทะเบียน: ${x.type||'-'} • ไฟล์: ${x.file}</div>
+
+    <div class="small">
+      ประเภทการลงทะเบียน: ${x.type || '-'} • ไฟล์: ${x.file}
+    </div>
   `;
 
   result.classList.remove('hidden');
 
-  const preview=document.getElementById('certificatePreview');
-  const loading=document.getElementById('certificateLoading');
-  const progress=document.getElementById('certificateProgress');
-  const progressText=document.getElementById('certificateProgressText');
-  const progressPercent=document.getElementById('certificateProgressPercent');
-  const download=document.getElementById('certificateDownload');
-
-  let currentProgress=0;
-  let timer=setInterval(()=>{
-    if(currentProgress<88){
-      const step=currentProgress<35?7:currentProgress<65?4:currentProgress<82?2:.7;
-      currentProgress=Math.min(88,currentProgress+step);
-      progress.style.width=currentProgress+'%';
-      progressPercent.textContent=Math.round(currentProgress)+'%';
-      progressText.textContent=currentProgress<30?'กำลังเตรียมเกียรติบัตร...':
-        currentProgress<65?'กำลังโหลดภาพเกียรติบัตร...':'กำลังประมวลผล...';
-    }
-  },180);
-
-  function setProgress(value,text){
-    currentProgress=Math.max(currentProgress,value);
-    progress.style.width=currentProgress+'%';
-    progressPercent.textContent=Math.round(currentProgress)+'%';
-    progressText.textContent=text;
+  const downloadLink = document.getElementById('certificateDownload');
+  if(downloadLink) {
+    downloadLink.addEventListener('click', function(){
+      if(typeof gtag === 'function') gtag('event', 'certificate_download', {
+        certificate_name: x.name,
+        file_name: x.file
+      });
+    }, {once:true});
   }
 
-  const img=new Image();
+  const preview = document.getElementById('certificatePreview');
+  const img = new Image();
 
-  img.onload=function(){
-    clearInterval(timer);
-    setProgress(100,'✓ โหลดเกียรติบัตรสำเร็จ');
-    loading.classList.add('done','progress-success');
-
-    setTimeout(()=>{
-      img.alt='เกียรติบัตรของ '+x.name;
-      preview.innerHTML='';
-      preview.appendChild(img);
-      download.style.visibility='visible';
-      download.style.opacity='1';
-      download.style.pointerEvents='auto';
-      download.style.transition='opacity .35s ease, transform .35s ease';
-    },280);
+  img.onload = function(){
+    img.alt = 'เกียรติบัตรของ ' + x.name;
+    preview.innerHTML = '';
+    preview.appendChild(img);
   };
 
-  img.onerror=function(){
-    clearInterval(timer);
-    setProgress(100,'⚠️ ไม่พบไฟล์ภาพ');
-    loading.classList.add('done','progress-error');
-    setTimeout(()=>{
-      preview.innerHTML=`<div class="msg">⚠️ พบข้อมูลใน Excel แล้ว แต่ยังไม่พบไฟล์ภาพ<br><b>${x.file}</b></div>`;
-    },250);
+  img.onerror = function(){
+    preview.innerHTML = `
+      <div class="msg">
+        ⚠️ พบข้อมูลใน Excel แล้ว แต่ยังไม่พบไฟล์ภาพ<br>
+        <b>${x.file}</b>
+      </div>
+    `;
   };
 
-  setProgress(8,'กำลังเชื่อมต่อกับไฟล์เกียรติบัตร...');
-  img.src=imgPath;
+  img.src = imgPath;
 }
+input.addEventListener('input',showSuggestions);
+document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))suggestions.classList.add('hidden')});
+loadExcel();
+const COMMENTS_API =
+  'https://script.google.com/macros/s/AKfycbwZHbR8q9rtko1DBoD5qlexLQ3y5u4pXLA7BPWi0BuNh9PFz2NwjpeujAVzd5OoRChc/exec';
+
+
+async function submitComment() {
+
+  const nameInput = document.getElementById('commentName');
+  const commentInput = document.getElementById('commentText');
+  const button = document.getElementById('commentSubmit');
+  const message = document.getElementById('commentMessage');
+
+  const name = nameInput.value.trim();
+  const comment = commentInput.value.trim();
+
+  if (!name) {
+    message.textContent = '⚠️ กรุณากรอกชื่อ';
+    return;
+  }
+
+  if (!comment) {
+    message.textContent = '⚠️ กรุณากรอกความคิดเห็น';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'กำลังส่ง...';
+  message.textContent = '';
+
+  try {
+
+    await fetch(COMMENTS_API, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify({
+        name: name,
+        comment: comment
+      })
+    });
+
+    nameInput.value = '';
+    commentInput.value = '';
+
+    message.textContent = '✅ ส่งความคิดเห็นเรียบร้อยแล้ว ขอบคุณครับ!';
+
+    setTimeout(loadComments, 800);
+
+  } catch (error) {
+
+    message.textContent =
+      '❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = '📨 ส่งความคิดเห็น';
+
+  }
+}
+
+
+async function loadComments() {
+
+  const list = document.getElementById('commentsList');
+
+  try {
+
+    const response = await fetch(COMMENTS_API);
+    const data = await response.json();
+
+    if (!data.success || !data.comments.length) {
+
+      list.innerHTML =
+        '<div class="comments-loading">ยังไม่มีความคิดเห็น เป็นคนแรกเลย! 🥋</div>';
+
+      return;
+    }
+
+    const comments = data.comments.reverse();
+
+    list.innerHTML = comments.map(item => {
+
+      const name = escapeHTML(item.name);
+      const comment = escapeHTML(item.comment);
+
+      let date = '';
+
+      if (item.date) {
+        date = new Date(item.date).toLocaleDateString('th-TH', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
+      return `
+        <div class="comment-item">
+          <strong>👤 ${name}</strong>
+          <small>${date}</small>
+          <p>${comment}</p>
+        </div>
+      `;
+
+    }).join('');
+
+  } catch (error) {
+
+    list.innerHTML =
+      '<div class="comments-loading">ไม่สามารถโหลดความคิดเห็นได้</div>';
+
+  }
+}
+
+
 function escapeHTML(text) {
 
   return String(text)
